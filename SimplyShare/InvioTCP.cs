@@ -72,7 +72,7 @@ namespace SimplyShare
             try
             {
                 //Int32 portTCP = 8001;
-                TcpClient client = new TcpClient();
+                TcpClient client = new TcpClient(); ////buuu
                 client.Connect(remoteEp.Address,remoteEp.Port);
                 MessageBox.Show(client.Connected.ToString() + "connessione ");
                 //scrivere quello che si vuole fare...la connessione è avvenuta
