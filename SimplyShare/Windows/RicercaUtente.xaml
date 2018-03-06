@@ -1,0 +1,40 @@
+﻿<Window x:Class="SimplyShare.Windows.RicercaUtente"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimplyShare.Windows"
+        xmlns:CustomControl="clr-namespace:SimplyShare.CustomControls"
+        Width="600"
+        Height="400"
+        MinWidth="600"
+        mc:Ignorable="d"
+        Title="RicercaUtente">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer>
+            <WrapPanel x:Name="UsersContainer" Margin="20">
+            </WrapPanel>
+        </ScrollViewer>
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="110"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="PathContainer" Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,0" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock VerticalAlignment="Center" Text="Percorso:" Margin="0,0,10,0"/>
+                    <Label VerticalAlignment="Center"  ClipToBounds="True" Width="225" HorizontalContentAlignment="Left" HorizontalAlignment="Right" Padding="0" >
+                        <TextBlock FontSize="12" x:Name="PercorsoFile" VerticalAlignment="Center" HorizontalAlignment="Right" TextAlignment="Right" Height="19" />
+                    </Label>
+                    <Button x:Name="SfogliaButton" Click="SfogliaButton_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,100,0" Padding="5,2" Content="Sfoglia"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Button x:Name="Update" Click="Update_Click" Content="Aggiorna" Margin="0,0,20,0"/>
+                <Button x:Name="InviaButton" Click="InviaButton_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5,2" Content="Invia"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
