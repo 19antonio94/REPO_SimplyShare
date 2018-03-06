@@ -13,7 +13,7 @@ using System.Reflection;
 using shared;
 using System.Windows;
 
-
+// ciao
 /* 
  * Nel pacchetto bisogna inserire il proprio indirizzo IP e la porta in cui si sta ascoltando(8000)-->Fatto con EndPoint
  *
