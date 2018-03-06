@@ -75,7 +75,7 @@ namespace SimplyShare
                 TcpClient client = new TcpClient();
                 client.Connect(remoteEp.Address,remoteEp.Port);
                 MessageBox.Show(client.Connected.ToString() + "connessione ");
-                
+                //scrivere quello che si vuole fare...la connessione è avvenuta
             }
             catch (Exception e)
             {

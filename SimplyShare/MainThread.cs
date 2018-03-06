@@ -45,7 +45,7 @@ namespace SimplyShare
         Thread anq2;
         Thread invia_file;
         Boolean modalita = true; //true-->publica, false --> privata
-        InvioTCP s; //
+        InvioTCP s = null; //
         Thread tcp;
         int lstPort;
         public MainThread(User u)
@@ -179,7 +179,8 @@ namespace SimplyShare
                          * 
                          * 
                         */
-                       Int32 porta = s.getUsedPort();
+                        Int32 porta = s.getUsedPort();
+                        ipep.Port = porta;
                         Packet p_risposta_annuncio = new Packet("Risposta Annuncio",ipep,user); //mettere il proprio utente-->creare classe utente
                         /*                                                                     //aggiungere listPort;
                         //Salvare l'utente e creare la classe utente in "shared"                        
@@ -187,7 +188,7 @@ namespace SimplyShare
                         byte[] data_risp_ann = new byte[1024*100];
                         data_risp_ann = serialize(p_risposta_annuncio);                      
                         newsock.Send(data_risp_ann, data_risp_ann.Length, p_estratto.getIpMittente());
-
+                        
 
 
 
@@ -195,18 +196,20 @@ namespace SimplyShare
                     }
                     if (p_estratto.getDescrizione().Equals("Risposta Annuncio")  && !p_estratto.getIpMittente().Equals(ipep))
                     {
+                       
                         //mettilo nella lista di utenti attivi
                         if (!utenti.ContainsKey(p_estratto.getIpMittente()))
                         {
-
+                            Int32 porta = s.getUsedPort();
+                            ipep.Port = porta;
                             //richiedi user in tcp
                             //Int32 portTCP = 8001;
                             //TcpClient client = new TcpClient(ipep);
                             //client.Connect(p_estratto.getIpMittente());
 
 
-                            InvioTCP s = new InvioTCP(ipep, user, p_estratto.getIpMittente(),this); //
-                            var tcp = new Thread(new ThreadStart(s.TcpConnect));
+                            InvioTCP s1 = new InvioTCP(ipep, user, p_estratto.getIpMittente(),this); //
+                            var tcp = new Thread(new ThreadStart(s1.TcpConnect));
                             tcp.Start();
 
 
