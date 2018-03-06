@@ -164,7 +164,7 @@ namespace SimplyShare
             while (true)
             {
                 _m.WaitOne();
-                if (queue.Count > 0) //a
+                if (queue.Count > 0) //a 
                 {
                     p_estratto = queue.Dequeue();
                     //qui eseguo quello che c'e da fare per quel pacchetto
