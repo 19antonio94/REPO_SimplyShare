@@ -11,12 +11,13 @@
                 <ControlTemplate TargetType="{x:Type local2:ConnectedUser}" >
                     <Button x:Name="MainButton" Background="{TemplateBinding UserBackground}" BorderBrush="Transparent" BorderThickness="0" Margin="10">
                         <StackPanel VerticalAlignment="Top" Width="120" Height="130">
-                            <Ellipse Width="100" Height="100">
+                            <!--Ellipse Width="100" Height="100">
                                 <Ellipse.Fill>
 
                                     <ImageBrush  ImageSource="{TemplateBinding UserPicSource}" ></ImageBrush>
-                                </Ellipse.Fill>
-                            </Ellipse>
+                                </Ellipse.Fill-->
+
+                            <Image Width="100" Height="100" Stretch="UniformToFill" Source="{TemplateBinding UserPicSource}"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock x:Name="Nome" Text="{TemplateBinding Nome}" HorizontalAlignment="Center" Margin="0,0,4,0"/>
                                 <TextBlock x:Name="Cognome" Text="{TemplateBinding Cognome}" HorizontalAlignment="Center"/>
