@@ -13,6 +13,7 @@ using SimplyShare.Windows;
 using System.Diagnostics;
 using shared;
 using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace SimplyShare
 {
@@ -31,6 +32,7 @@ namespace SimplyShare
             mt = null;
 
             CreateTaskbarIcon();
+            install();
             //TaskBarIconThread = new Thread(CreateTaskbarIcon);
             //TaskBarIconThread.SetApartmentState(ApartmentState.STA);
             //TaskBarIconThread.Start();
@@ -104,5 +106,23 @@ namespace SimplyShare
 
         }
 
+        private static string getUserDirectory(){
+            //Ricavo la directory corrente
+            string currentPath = Directory.GetCurrentDirectory();
+            //Genero il path della cartella in cui voglio salvare i dati
+            return Path.Combine(currentPath, "User Profile");
+        }
+
+        private static void install(){
+            
+            string newPath = getUserDirectory();
+            
+            //Questo if è come se fosse l'installazione automatica al primo avvio
+            if (!Directory.Exists(newPath))
+            {
+                //Se non esiste creo la directory
+                Directory.CreateDirectory(newPath);
+            }
+        }
     }
 }
