@@ -100,8 +100,7 @@ namespace SimplyShare.Windows
         private delegate void del_cleaner(UIElementCollection children);
         private void visualize(List<User> lstUtenti)
         {
-            User n = mt.getUser();
-            lstUtenti.Add(n);
+
            
             foreach (User u in lstUtenti)
             {
