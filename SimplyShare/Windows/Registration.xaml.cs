@@ -57,7 +57,7 @@ namespace SimplyShare.Windows
                     try
                     {
                         pic = new BitmapImage(new Uri(filename));
-                    ProfilePic.ImageSource = pic;
+                        ProfilePic.ImageSource = pic;
                         immagineCaricata = true;
                     }
                     catch

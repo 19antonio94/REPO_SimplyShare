@@ -60,13 +60,15 @@ namespace SimplyShare.CustomControls
 
 
 
+
+
         public ImageSource UserPicSource
         {
             get { return (ImageSource)GetValue(UserPicSourceProperty); }
             set { SetValue(UserPicSourceProperty, value); }
         }
         public static readonly DependencyProperty UserPicSourceProperty =
-            DependencyProperty.Register("UserPicSource", typeof(ImageSource), typeof(ConnectedUser), new PropertyMetadata(null));
+            DependencyProperty.Register("UserPicSource", typeof(ImageSource), typeof(ConnectedUser), null);
 
 
 

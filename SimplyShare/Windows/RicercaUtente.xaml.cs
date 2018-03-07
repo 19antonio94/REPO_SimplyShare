@@ -100,7 +100,9 @@ namespace SimplyShare.Windows
         private delegate void del_cleaner(UIElementCollection children);
         private void visualize(List<User> lstUtenti)
         {
-
+            User n = mt.getUser();
+            lstUtenti.Add(n);
+           
             foreach (User u in lstUtenti)
             {
                 if (u != null)
@@ -108,7 +110,7 @@ namespace SimplyShare.Windows
                     ConnectedUser cu = new ConnectedUser();
                     cu.Nome = u.getNome();
                     cu.Cognome = u.getCognome();
-                    cu.UserPicSource = ToImage(u.getImageByte());
+                    cu.UserPicSource = ToImage(u.getImageByte());                    
                     cu.UserClicked += Cu_UserClicked;
                     //cu.UserPicSource = (BitmapImage)u.GetProfilePic();
                     UsersContainer.Children.Add(cu);

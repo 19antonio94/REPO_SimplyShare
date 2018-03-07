@@ -88,6 +88,10 @@ namespace SimplyShare
             user = utente;
 
         }
+        public User getUser()
+        {
+            return user;
+        }
         public void setModalità(Boolean set)
         {
             modalita = set;
