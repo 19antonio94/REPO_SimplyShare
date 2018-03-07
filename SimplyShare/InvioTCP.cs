@@ -76,6 +76,9 @@ namespace SimplyShare
                 client.Connect(remoteEp.Address,remoteEp.Port);
                 MessageBox.Show(client.Connected.ToString() + "connessione ");
                 //scrivere quello che si vuole fare...la connessione è avvenuta
+                Byte[] image = utente_da_inviare.getImageByte();
+                NetworkStream ns = client.GetStream();
+                ns.Write(image,0,image.Length);
             }
             catch (Exception e)
             {
