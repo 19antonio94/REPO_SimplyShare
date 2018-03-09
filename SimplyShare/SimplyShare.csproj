@@ -66,6 +66,7 @@
     <Compile Include="MainThread.cs" />
     <Compile Include="Models\LoggedUser.cs" />
     <Compile Include="Send.cs" />
+    <Compile Include="Utilities\Persistency.cs" />
     <Compile Include="Windows\Registration.xaml.cs">
       <DependentUpon>Registration.xaml</DependentUpon>
     </Compile>

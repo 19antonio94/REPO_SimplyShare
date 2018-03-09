@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SimplyShare.Utilities
 {
@@ -15,10 +19,10 @@ namespace SimplyShare.Utilities
 
         public static void install()
         {
-
             string newPath = getUserDirectory();
-
+        
             //Questo if è come se fosse l'installazione automatica al primo avvio
+
             if (!Directory.Exists(newPath))
             {
                 //Se non esiste creo la directory
@@ -27,17 +31,11 @@ namespace SimplyShare.Utilities
             }
         }
 
-        public static void saveUserData(LoggedUser user)
+        public static void saveUserData(Models.LoggedUser user)
         {
             string path = getUserDirectory();
             File.WriteAllText(path + @"\nomeUtente.txt", user.Nome + '\n' + user.Cognome);
 
         }
-
-        public static LoggedUser loadUserData()
-        {
-
-        }
     }
 }
-   
