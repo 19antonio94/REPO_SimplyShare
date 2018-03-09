@@ -74,11 +74,34 @@ namespace SimplyShare
                 //Int32 portTCP = 8001;
                 TcpClient client = new TcpClient(); ////buuu
                 client.Connect(remoteEp.Address,remoteEp.Port);
-                MessageBox.Show(client.Connected.ToString() + "connessione ");
+                //MessageBox.Show(client.Connected.ToString() + "connessione ");
                 //scrivere quello che si vuole fare...la connessione è avvenuta
-                Byte[] image = utente_da_inviare.getImageByte();
-                NetworkStream ns = client.GetStream();
-                ns.Write(image,0,image.Length);
+
+                //Byte[] image = utente_da_inviare.getImageByte();
+                //NetworkStream ns = client.GetStream();
+                //ns.Write(image,0,image.Length);
+
+                //richista immagine
+                        /*
+                         * 
+                         * 
+                         * 
+                         * 
+                         * 
+                         */
+                
+
+                //ricezione immagine
+                        /*
+                         * 
+                         * 
+                         * 
+                         * 
+                         * 
+                         */
+
+
+
             }
             catch (Exception e)
             {
@@ -89,12 +112,16 @@ namespace SimplyShare
 
 
         }
-        private static void ThreadProc(object obj)
+        private void ThreadProc(object obj)
         {
             var client = (TcpClient)obj;
             // Do your work here 
             Console.WriteLine("Connected");
-            //chiudere la connessione
+                //Ricevi la richiesta("Request Immagine")
+
+
+                //rispondi con immagine o text = 'NO'
+                    
         }
 
         public int getUsedPort()

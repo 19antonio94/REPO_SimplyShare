@@ -93,8 +93,15 @@ namespace SimplyShare
         }
         private static void send_file(object sender,EventArgs e)
         {
-            
-            RU.Show();
+            try
+            {
+                RU.Show();
+            }
+            catch (InvalidOperationException exception)
+            {
+                Console.WriteLine(exception.Message);
+
+            }
             
             
         }

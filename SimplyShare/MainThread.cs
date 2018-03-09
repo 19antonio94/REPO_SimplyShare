@@ -206,12 +206,9 @@ namespace SimplyShare
                         {
                             Int32 porta = s.getUsedPort();
                             ipep.Port = porta;
-                            //richiedi user in tcp
-                            //Int32 portTCP = 8001;
-                            //TcpClient client = new TcpClient(ipep);
-                            //client.Connect(p_estratto.getIpMittente());
 
 
+                            
                             InvioTCP s1 = new InvioTCP(ipep, user, p_estratto.getIpMittente(),this); //
                             var tcp = new Thread(new ThreadStart(s1.TcpConnect));
                             tcp.Start();
