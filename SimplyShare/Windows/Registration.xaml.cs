@@ -34,11 +34,25 @@ namespace SimplyShare.Windows
         public Registration()
         {
             InitializeComponent();
+            Pubblica.IsChecked = true;
+            //Load user data from disk (if exist)
+            LoggedUser previousAccess = Utilities.Persistency.loadUserData();
+            if(previousAccess != null)
+            {
+                Nome.Text = previousAccess.Nome;
+                Cognome.Text = previousAccess.Cognome;
+                if(previousAccess.ProfilePic != null)
+                {
+                    ProfilePic.ImageSource = previousAccess.ProfilePic;
+                    immagineCaricata = true;
+                }
+            }
         }
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             Result= new LoggedUser(pic, Nome.Text, Cognome.Text, modalita); //mettere in result tutte le cose che servono
-            this.DialogResult = true;                                                          //modalità
+            Utilities.Persistency.saveUserData(Result);                     //Salvo dati utente              
+            this.DialogResult = true;                                       //modalità
             this.Close();
         }
         private void Privata_Checked(object sender, RoutedEventArgs e)
