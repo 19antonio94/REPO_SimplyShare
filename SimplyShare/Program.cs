@@ -30,6 +30,13 @@ namespace SimplyShare
         {
             mt = null;
 
+            //Auto kill se un'istanza di SimplyShare già in esecuzione
+            if (Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
+            {
+                //Qua bisogna passare tutti gli args ricevuti all'unica istanza che rimane aperta
+                Process.GetCurrentProcess().Kill();
+            }
+
             CreateTaskbarIcon();
             Utilities.Persistency.install();
             //TaskBarIconThread = new Thread(CreateTaskbarIcon);
