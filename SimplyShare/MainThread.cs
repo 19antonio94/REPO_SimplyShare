@@ -71,9 +71,11 @@ namespace SimplyShare
 
         }
 
+
+
         public void setListener()
         {
-            s = new InvioTCP(ipep, user,this); //
+            s = new InvioTCP(ipep, null, user,this); //
             tcp = new Thread(new ThreadStart(s.tcpAscolto));
             tcp.Start();
 
@@ -179,8 +181,10 @@ namespace SimplyShare
                          * Bisogna rispondere con se stesso(descrizione == Risposta Annuncio)
                          * POICHE la connect è bloccante bisogna farlo andare su un altro thread
                          * devo inviare user con la foto
-                         * 
-                         * 
+                         * come rispondo :
+                         *              
+                         *              
+                         *              
                          * 
                         */
                         Int32 porta = s.getUsedPort();
@@ -192,11 +196,6 @@ namespace SimplyShare
                         byte[] data_risp_ann = new byte[1024*100];
                         data_risp_ann = serialize(p_risposta_annuncio);                      
                         newsock.Send(data_risp_ann, data_risp_ann.Length, p_estratto.getIpMittente());
-                        
-
-
-
-
                     }
                     if (p_estratto.getDescrizione().Equals("Risposta Annuncio")  && !p_estratto.getIpMittente().Equals(ipep))
                     {
@@ -206,19 +205,11 @@ namespace SimplyShare
                         {
                             Int32 porta = s.getUsedPort();
                             ipep.Port = porta;
-
-
-                            
-                            InvioTCP s1 = new InvioTCP(ipep, user, p_estratto.getIpMittente(),this); //
+                            utenti.Add(p_estratto.getIpMittente(), p_estratto.getUser());
+                            InvioTCP s1 = new InvioTCP(ipep, p_estratto.getUser(), p_estratto.getIpMittente(),this); //qui richiedo l'immagine
                             var tcp = new Thread(new ThreadStart(s1.TcpConnect));
                             tcp.Start();
-
-
-                            //
-
-                            utenti.Add(p_estratto.getIpMittente(), p_estratto.getUser());
                         }
-
                         //windows.lstUtenti.Dispatcher.Invoke(delegato1,new object[] {p_estratto.getUser().getCognome() });      
                         //windows.Dispatcher.Invoke(delegato1, new object[] { p_estratto.getUser().getCognome() }); //+immagine
                     }
@@ -226,24 +217,16 @@ namespace SimplyShare
                     {
                         //message box per sapere se si vuole accettare o no
                         //problema path_file , come farlo bene ?
-
-                        
-
                     }
-                    
-
                 }
                 _m.ReleaseMutex();
             }
         }
-
         public Dictionary<IPEndPoint, User> getDictionary()
         {
             Thread.Sleep(3000);
             return utenti;
         }
-
-
         public void ricerca_utenti()
         {
             utenti.Clear();
@@ -261,10 +244,8 @@ namespace SimplyShare
             {
                 subnet = Utilities.Utilities.getSubMask(IPAddress.Parse(Utilities.Utilities.findIP()));
             }
-            catch (Exception e) {
-
+            catch (Exception e) {          
                 MessageBox.Show(e.Message + "problema submask");
-
             }
             IPAddress broadcast = Utilities.Utilities.findBroadCast(IPAddress.Parse(Utilities.Utilities.findIP()), subnet);
             IPEndPoint ip_to = new IPEndPoint(broadcast, 8000);
@@ -282,17 +263,12 @@ namespace SimplyShare
         {
             //SE DEVO USARE IL FORM
            // windows.lstUtenti.Items.Add(cognome);
-            //windows.txtbox1.Text = testo; 
-
-            
+            //windows.txtbox1.Text = testo;           
         }
-
         public void setlstPort(int port)
         {
             lstPort = port;
         }
-
-
 
         public void end_thread()
         {

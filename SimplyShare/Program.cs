@@ -32,9 +32,7 @@ namespace SimplyShare
 
             CreateTaskbarIcon();
             Utilities.Persistency.install();
-            //TaskBarIconThread = new Thread(CreateTaskbarIcon);
-            //TaskBarIconThread.SetApartmentState(ApartmentState.STA);
-            //TaskBarIconThread.Start();
+
             ///
             /// Registrazione utente
             ///
@@ -44,10 +42,8 @@ namespace SimplyShare
 
                 if (registration.ShowDialog() == false)
                     return;
-                LoggedU = (LoggedUser)registration.Result;      //??????
-                
+                LoggedU = (LoggedUser)registration.Result;                     
                 User u = new User(LoggedU.Nome, LoggedU.Cognome, LoggedU.ProfilePic);
-
                 mt = new MainThread(u);
                 mt.setModalità(LoggedU.Modality);
                 ///
