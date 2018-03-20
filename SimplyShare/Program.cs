@@ -16,32 +16,29 @@ using System.Windows.Media.Imaging;
 
 namespace SimplyShare
 {
-
     class Program
     {
-        
         private static TaskbarIcon tbi;
         private static LoggedUser LoggedU;
+        public static int PORTA = 60020;
         static MainThread mt;
         static  RicercaUtente RU;
-
+        static Registration registration;
         [STAThread]
         public static void Main(string[] args)
         {
             mt = null;
-
             CreateTaskbarIcon();
             Utilities.Persistency.install();
-
-            ///
-            /// Registrazione utente
-            ///
             try
             {
-                Registration registration = new Registration();
+                registration = new Registration();
 
                 if (registration.ShowDialog() == false)
+                {
+                    Environment.Exit(Environment.ExitCode);
                     return;
+                }
                 LoggedU = (LoggedUser)registration.Result;                     
                 User u = new User(LoggedU.Nome, LoggedU.Cognome, LoggedU.ProfilePic);
                 mt = new MainThread(u);
@@ -61,7 +58,6 @@ namespace SimplyShare
             return;
 #endif
             Environment.Exit(Environment.ExitCode);
-
             return;
 
         }
@@ -102,8 +98,14 @@ namespace SimplyShare
         }
         private static void exit(object sender, EventArgs e)
         {
-
-            if (RU.IsInitialized) { RU.Close(); }
+            if (registration != null)
+            {
+                registration.Close();
+            }
+            if (RU != null)
+            {
+                RU.Close();
+            }
             tbi.Dispose();
 
         }

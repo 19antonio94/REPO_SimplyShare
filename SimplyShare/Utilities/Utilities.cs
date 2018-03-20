@@ -30,10 +30,10 @@ namespace SimplyShare.Utilities
             //Ricevi la richiesta("send me image") 
             var stream = client.GetStream();
             byte[] message = MyReceive(stream);
-            Encoding.ASCII.GetString(message);
-            if (message.Equals("send me image"))
+             Encoding.ASCII.GetString(message);
+            if (Encoding.ASCII.GetString(message).Equals("send me image")) //se mi richiede l'immagine allora la invio
             {
-                stream.Write(PCuser.profilePic, 0, PCuser.profilePic.Length);
+                stream.Write(PCuser.profilePic, 0, PCuser.profilePic.Length);  
             }
             if (message.Equals("invio il file"))
             {
@@ -47,7 +47,7 @@ namespace SimplyShare.Utilities
         private byte[] MyReceive(NetworkStream stream)
         {
             List<Byte> lstBuff = new List<byte>();
-            byte[] tempBuff = new byte[1024];
+            byte[] tempBuff = new byte[1];
             byte[] completeMessage;
             Thread.Sleep(30);
             if (stream.CanRead)

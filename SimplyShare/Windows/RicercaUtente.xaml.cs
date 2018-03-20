@@ -29,7 +29,6 @@ namespace SimplyShare.Windows
         bool[] selectedUsers;
         byte[] file = null;
         List<User> utenti;
-
         public RicercaUtente(MainThread mt)
         {
             InitializeComponent();
@@ -43,7 +42,6 @@ namespace SimplyShare.Windows
         {
             mt.setListener();
             utenti = Ricerca_utenti();
-
             visualize(utenti);
             
         }
