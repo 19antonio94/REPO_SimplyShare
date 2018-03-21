@@ -223,7 +223,7 @@ namespace SimplyShare
                 newsock.Send(data, data.Length, ip_to);
                 newsock.Send(data, data.Length, ip_to);
                 newsock.Send(data, data.Length, ip_to);
-                MessageBox.Show("sended to:\n" + ip_to.Address + " " + ip_to.Port);
+                
             }
             catch (Exception e)
             {

@@ -139,29 +139,34 @@ namespace SimplyShare
                     //richiesta immagine
                     string message = "send me image";
                     Byte[] messageByte = Encoding.ASCII.GetBytes(message);
-                    Byte[] buffer = new byte[1024];
+                    
                     Byte[] immagine;
+                    Byte[] size_b = new byte[8];
                     List<Byte> lstimg = new List<byte>();
                     var stream = client.GetStream();
                     stream.Write(messageByte, 0, messageByte.Length);
-                    int n_byte_letti = 1028;
+                    int n_byte_letti = 0;
                     //ricezione immagine
-                    Thread.Sleep(300);
+                    stream.Read(size_b, 0, 8);
+                    Int64 size = BitConverter.ToInt64(size_b,0);
+                    
                     if (stream.CanRead)
                     {
-                        while (stream.DataAvailable) //impostare condizione di uscita corretta ??solo in debug funziona 
+                        while (size > 0)
                         {
-                            try
-                            {
-                                n_byte_letti = stream.Read(buffer, 0, buffer.Length);
-                                lstimg.AddRange(buffer);
-                                //aggiungere buffer alla bitmap
+                                try
+                                {
+                                Byte[] buffer = new byte[1];
+                                n_byte_letti = stream.Read(buffer, 0, 1);                            
+                                size -= n_byte_letti;                                
+                                lstimg.AddRange(buffer);                                       
+                                }
+                                catch (Exception e)
+                                {
+                                    MessageBox.Show(e.Message + " tcp connect errore lettura");
+                                }
                             }
-                            catch (Exception e)
-                            {
-                                MessageBox.Show(e.Message + " tcp connect errore lettura");
-                            }
-                        }
+                        
                         immagine = new byte[lstimg.Count];
                         lstimg.CopyTo(immagine);
                         //inserimento in user della foto: 

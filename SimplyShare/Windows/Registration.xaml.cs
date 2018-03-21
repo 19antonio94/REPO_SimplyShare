@@ -34,6 +34,7 @@ namespace SimplyShare.Windows
         public Registration()
         {
             InitializeComponent();
+            Pubblica.IsChecked = true;
         }
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -62,9 +63,7 @@ namespace SimplyShare.Windows
                     }
                     catch
                     {
-
-                    }
-                
+                    }                
             }
         }
 
@@ -90,8 +89,5 @@ namespace SimplyShare.Windows
             else
                 StartButton.IsEnabled = false;
         }
-
-
-
     }
 }

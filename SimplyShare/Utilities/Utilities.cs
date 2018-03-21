@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace SimplyShare.Utilities
 {
@@ -33,13 +34,20 @@ namespace SimplyShare.Utilities
              Encoding.ASCII.GetString(message);
             if (Encoding.ASCII.GetString(message).Equals("send me image")) //se mi richiede l'immagine allora la invio
             {
-                stream.Write(PCuser.profilePic, 0, PCuser.profilePic.Length);  
+
+                Int64 size_immagine = PCuser.profilePic.LongLength;
+                
+                byte[] size_b = new byte[8];
+                size_b = BitConverter.GetBytes(size_immagine);             
+                stream.Write(size_b, 0, size_b.Length);
+                stream.Write(PCuser.profilePic, 0, PCuser.profilePic.Length);
+
             }
             if (message.Equals("invio il file"))
             {
+                //message bocs --> x = x+1  x := x+1   
                 byte[] mess = Encoding.ASCII.GetBytes("aspetto il file");
                 stream.Write(mess,0,mess.Length);
-
                 //ricezione e salvataggio file
             }
         }
@@ -61,7 +69,6 @@ namespace SimplyShare.Utilities
             completeMessage = new byte[lstBuff.Count];
             lstBuff.CopyTo(completeMessage);
             return completeMessage;
-
         }
 
 
@@ -99,7 +106,6 @@ namespace SimplyShare.Utilities
         {
             byte[] ipAdressBytes = address.GetAddressBytes();
             byte[] subnetMaskBytes = subnetMask.GetAddressBytes();
-
             if (ipAdressBytes.Length != subnetMaskBytes.Length)
                 throw new ArgumentException("Lengths of IP address and subnet mask do not match.");
 
@@ -109,6 +115,19 @@ namespace SimplyShare.Utilities
                 broadcastAddress[i] = (byte)(ipAdressBytes[i] | (subnetMaskBytes[i] ^ 255));
             }
             return new IPAddress(broadcastAddress);
+        }
+        public BitmapImage ToImage(byte[] array)
+        {
+            if (array == null) return null;
+            using (var ms = new System.IO.MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad; // here
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
         }
     }
 }
