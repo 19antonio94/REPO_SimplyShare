@@ -29,7 +29,6 @@ namespace SimplyShare.Windows
         bool[] selectedUsers;
         byte[] file = null;
         List<User> utenti;
-
         public RicercaUtente(MainThread mt)
         {
             InitializeComponent();
@@ -43,7 +42,6 @@ namespace SimplyShare.Windows
         {
             mt.setListener();
             utenti = Ricerca_utenti();
-
             visualize(utenti);
             
         }
@@ -65,7 +63,7 @@ namespace SimplyShare.Windows
             //selezione utente;
             foreach (ConnectedUser cu in UsersContainer.Children)
             {
-                if (cu.Selected)
+                if (cu.isSelected)
                 {
                     //invia file a cu
                     //trovare ip di cu 
@@ -101,35 +99,29 @@ namespace SimplyShare.Windows
         private void visualize(List<User> lstUtenti)
         {
 
-           
             foreach (User u in lstUtenti)
             {
                 if (u != null)
                 {
-                    ConnectedUser cu = new ConnectedUser();
-                    cu.Nome = u.getNome();
-                    cu.Cognome = u.getCognome();
-                    cu.UserPicSource = ToImage(u.getImageByte());                    
-                    cu.UserClicked += Cu_UserClicked;
-                    //cu.UserPicSource = (BitmapImage)u.GetProfilePic();
+                    ConnectedUser cu = new ConnectedUser(u.getNome(),u.getCognome(),null,ToImage(u.getImageByte()));                                      
+                    cu.Click += Cu_UserClicked;                  
                     UsersContainer.Children.Add(cu);
                 }
             }
-
         }
 
         private void Cu_UserClicked(object sender, RoutedEventArgs e)
         {
-            if (((ConnectedUser)sender).Selected)
+            if (((ConnectedUser)sender).isSelected)
             {
-                ((ConnectedUser)sender).Selected = false;
-                ((ConnectedUser)sender).UserBackground = Brushes.Transparent;
+                ((ConnectedUser)sender).isSelected = false;
+                ((ConnectedUser)sender).Background = Brushes.Transparent;
                 
             }
             else
             {
-                ((ConnectedUser)sender).Selected = true;
-                ((ConnectedUser)sender).UserBackground = Brushes.Azure;
+                ((ConnectedUser)sender).isSelected = true;
+                ((ConnectedUser)sender).Background = Brushes.CadetBlue;
             }
         }
 

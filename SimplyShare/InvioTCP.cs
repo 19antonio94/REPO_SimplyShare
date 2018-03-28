@@ -1,6 +1,7 @@
 ﻿using shared;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace SimplyShare
 {
@@ -15,23 +17,43 @@ namespace SimplyShare
     {
         IPEndPoint remoteEp;
         IPEndPoint localEP;
-        User utente_da_riempire; //sarebbe il risultato con la foto
-        User utente_da_inviare;
+        User PCuser; //sarebbe il risultato con la foto
+        User utente_image; //utente in cui si carica la foto
         Int32 usedPort;
         MainThread mt;
-        public InvioTCP(IPEndPoint localEP,User u, MainThread t)
+        string task;
+        string path_file = null;
+        public InvioTCP(IPEndPoint localEP, User u, MainThread t)
         {
-            utente_da_inviare = u;
+            utente_image = u;
             this.localEP = localEP;
             mt = t;
 
         }
-        public InvioTCP(IPEndPoint localEP, User u,IPEndPoint remoteEP, MainThread t)
+        public InvioTCP(IPEndPoint localEP, User u, MainThread t, string task)
         {
-            utente_da_inviare = u;
+            utente_image = u;
+            this.localEP = localEP;
+            mt = t;
+            this.task = task; //task indica cosa deve fare il thread
+
+        }
+        public InvioTCP(IPEndPoint localEP, User u, User PCuser, MainThread t)
+        {
+            utente_image = u;
+            this.localEP = localEP;
+            mt = t;
+            this.PCuser = PCuser;
+
+
+        }
+        public InvioTCP(IPEndPoint localEP, User u, IPEndPoint remoteEP, MainThread t, string task) //aggiungere path_file
+        {
+            utente_image = u;
             this.localEP = localEP;
             this.remoteEp = remoteEP;
-            
+            this.task = task;
+
         }
 
         public void tcpAscolto()
@@ -39,28 +61,24 @@ namespace SimplyShare
             TcpListener server = null;
             try
             {
-                Int32 portTCP = 0;
+                Int32 portTCP = Program.PORTA;
                 IPAddress localIP = localEP.Address;
-                server = new TcpListener(localIP,portTCP);
-               
+                server = new TcpListener(localIP, portTCP);
                 server.Start();
-                usedPort = ((IPEndPoint)(server.LocalEndpoint)).Port;
-                mt.setlstPort(usedPort);
-                Byte[] bytes = new Byte[256];
+
 
                 while (true)
                 {
                     Console.WriteLine("waiting for a connection");
                     TcpClient client = server.AcceptTcpClient();
-                    ThreadPool.QueueUserWorkItem(ThreadProc, client);
-                    
-
+                    Utilities.Utilities u = new Utilities.Utilities(client, PCuser);
+                    Thread t = new Thread(new ThreadStart(u.ThreadProc));
+                    t.Start();
 
                 }
-                
 
             }
-            catch(Exception e )
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message + "problema in tcpAscolto");
             }
@@ -73,33 +91,109 @@ namespace SimplyShare
             {
                 //Int32 portTCP = 8001;
                 TcpClient client = new TcpClient(); ////buuu
-                client.Connect(remoteEp.Address,remoteEp.Port);
-                MessageBox.Show(client.Connected.ToString() + "connessione ");
+                client.Connect(remoteEp.Address, remoteEp.Port);
+                //MessageBox.Show(client.Connected.ToString() + "connessione ");
                 //scrivere quello che si vuole fare...la connessione è avvenuta
-                Byte[] image = utente_da_inviare.getImageByte();
-                NetworkStream ns = client.GetStream();
-                ns.Write(image,0,image.Length);
+                if (task.Equals("invia il file"))
+                {
+                    // prima la richiesta per far capire che mando un file
+                    string message = "invio il file";
+                    byte[] rispostaByte = new byte[1024];
+                    Byte[] messageByte = Encoding.ASCII.GetBytes(message);
+                    var stream = client.GetStream();
+                    stream.Write(messageByte, 0, messageByte.Length);
+
+                    //aspettare conferma e poi inviare file
+                    stream.Read(rispostaByte, 0, rispostaByte.Length);
+                    string risposta = Encoding.ASCII.GetString(rispostaByte);
+                    if (risposta.Equals("aspetto il file"))
+                    {
+                        if (path_file != null)
+                        {
+                            //invia file(zip)
+                            FileStream fs = new FileStream(path_file, FileMode.Open, FileAccess.Read);
+                            BinaryReader br = new BinaryReader(fs);
+                            
+                            int count = 0;
+                            int size = -1;
+                            
+                            byte[] buff = new byte[4096];
+                            while ((size = fs.Read(buff, 0, buff.Count())) > 0)
+                            {
+                                stream.Write(buff, 0, buff.Count());
+                                count += size;
+                                int percentComplete = (int)(((float)count * 100) / (float)fs.Length);
+
+                            }
+
+                        }
+
+
+                    }
+
+
+                }
+
+                if (task.Equals("richiedi immagine"))
+                {
+                    //richiesta immagine
+                    string message = "send me image";
+                    Byte[] messageByte = Encoding.ASCII.GetBytes(message);
+                    
+                    Byte[] immagine;
+                    Byte[] size_b = new byte[8];
+                    List<Byte> lstimg = new List<byte>();
+                    var stream = client.GetStream();
+                    stream.Write(messageByte, 0, messageByte.Length);
+                    int n_byte_letti = 0;
+                    //ricezione immagine
+                    stream.Read(size_b, 0, 8);
+                    Int64 size = BitConverter.ToInt64(size_b,0);
+                    
+                    if (stream.CanRead)
+                    {
+                        while (size > 0)
+                        {
+                                try
+                                {
+                                Byte[] buffer = new byte[1];
+                                n_byte_letti = stream.Read(buffer, 0, 1);                            
+                                size -= n_byte_letti;                                
+                                lstimg.AddRange(buffer);                                       
+                                }
+                                catch (Exception e)
+                                {
+                                    MessageBox.Show(e.Message + " tcp connect errore lettura");
+                                }
+                            }
+                        
+                        immagine = new byte[lstimg.Count];
+                        lstimg.CopyTo(immagine);
+                        //inserimento in user della foto: 
+                        BitmapImage i = ToImage(immagine);
+                        utente_image.profilePic = immagine; // -->sarebbe bello che scatenasse l'evento di aggiungere utente_image al form ricerca_utente.xaml.cs
+                    }
+                }
+
             }
             catch (Exception e)
             {
-
-                MessageBox.Show(e.Message+"problema in TCPCONNECT");
+                MessageBox.Show(e.Message + "problema in TCPCONNECT");
             }
-
-
-
-        }
-        private static void ThreadProc(object obj)
-        {
-            var client = (TcpClient)obj;
-            // Do your work here 
-            Console.WriteLine("Connected");
-            //chiudere la connessione
         }
 
-        public int getUsedPort()
+        public BitmapImage ToImage(byte[] array)
         {
-            return usedPort;
+            if (array == null) return null;
+            using (var ms = new System.IO.MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad; // here
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
         }
 
 

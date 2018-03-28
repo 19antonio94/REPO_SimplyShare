@@ -17,12 +17,11 @@ using SimplyShare.Utilities;
 
 namespace SimplyShare
 {
-
     class Program
     {
-        
         private static TaskbarIcon tbi;
         private static LoggedUser LoggedU;
+        public static int PORTA = 60020;
         static MainThread mt;
         static  RicercaUtente RU;
 
@@ -31,6 +30,8 @@ namespace SimplyShare
          * da client pipe (tutti gli altri che non riescono ad acquistare il mutex)
         */
         static Mutex mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8CF-72F04E6BDE8F}");
+
+        static Registration registration;
 
         [STAThread]
         public static void Main(string[] args)
@@ -63,22 +64,17 @@ namespace SimplyShare
 
             CreateTaskbarIcon();
             Utilities.Persistency.install();
-            //TaskBarIconThread = new Thread(CreateTaskbarIcon);
-            //TaskBarIconThread.SetApartmentState(ApartmentState.STA);
-            //TaskBarIconThread.Start();
-            ///
-            /// Registrazione utente
-            ///
             try
             {
-                Registration registration = new Registration();
+                registration = new Registration();
 
                 if (registration.ShowDialog() == false)
+                {
+                    Environment.Exit(Environment.ExitCode);
                     return;
-                LoggedU = (LoggedUser)registration.Result;      //??????
-                
+                }
+                LoggedU = (LoggedUser)registration.Result;                     
                 User u = new User(LoggedU.Nome, LoggedU.Cognome, LoggedU.ProfilePic);
-
                 mt = new MainThread(u);
                 mt.setModalità(LoggedU.Modality);
                 ///
@@ -96,7 +92,6 @@ namespace SimplyShare
             return;
 #endif
             Environment.Exit(Environment.ExitCode);
-
             return;
 
         }
@@ -123,15 +118,28 @@ namespace SimplyShare
         }
         private static void send_file(object sender,EventArgs e)
         {
-            
-            RU.Show();
+            try
+            {
+                RU.Show();
+            }
+            catch (InvalidOperationException exception)
+            {
+                Console.WriteLine(exception.Message);
+
+            }
             
             
         }
         private static void exit(object sender, EventArgs e)
         {
-
-            if (RU.IsInitialized) { RU.Close(); }
+            if (registration != null)
+            {
+                registration.Close();
+            }
+            if (RU != null)
+            {
+                RU.Close();
+            }
             tbi.Dispose();
 
         }

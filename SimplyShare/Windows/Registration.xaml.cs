@@ -35,6 +35,7 @@ namespace SimplyShare.Windows
         {
             InitializeComponent();
             Pubblica.IsChecked = true;
+            
             //Load user data from disk (if exist)
             LoggedUser previousAccess = Utilities.Persistency.loadUserData();
             if(previousAccess != null)
@@ -47,6 +48,7 @@ namespace SimplyShare.Windows
                     immagineCaricata = true;
                 }
             }
+
         }
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -76,9 +78,7 @@ namespace SimplyShare.Windows
                     }
                     catch
                     {
-
-                    }
-                
+                    }                
             }
         }
 
@@ -104,8 +104,5 @@ namespace SimplyShare.Windows
             else
                 StartButton.IsEnabled = false;
         }
-
-
-
     }
 }

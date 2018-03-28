@@ -5,17 +5,17 @@
     xmlns:local2="clr-namespace:SimplyShare.CustomControls">
 
 
-    <Style TargetType="{x:Type local2:ConnectedUser}">
+    <!--Style TargetType="{x:Type local2:ConnectedUser}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local2:ConnectedUser}" >
                     <Button x:Name="MainButton" Background="{TemplateBinding UserBackground}" BorderBrush="Transparent" BorderThickness="0" Margin="10">
                         <StackPanel VerticalAlignment="Top" Width="120" Height="130">
-                            <!--Ellipse Width="100" Height="100">
+                            <Ellipse Width="100" Height="100">
                                 <Ellipse.Fill>
 
                                     <ImageBrush  ImageSource="{TemplateBinding UserPicSource}" ></ImageBrush>
-                                </Ellipse.Fill-->
+                                </Ellipse.Fill>
 
                             <Image Width="100" Height="100" Stretch="UniformToFill" Source="{TemplateBinding UserPicSource}"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -27,5 +27,5 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </-->
 </ResourceDictionary>
