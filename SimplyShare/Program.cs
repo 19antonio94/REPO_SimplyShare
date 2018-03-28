@@ -13,6 +13,7 @@ using SimplyShare.Windows;
 using System.Diagnostics;
 using shared;
 using System.Windows.Media.Imaging;
+using SimplyShare.Utilities;
 
 namespace SimplyShare
 {
@@ -23,11 +24,44 @@ namespace SimplyShare
         public static int PORTA = 60020;
         static MainThread mt;
         static  RicercaUtente RU;
+
+        /*
+         * Utilizzo di un mutex mai rilasciato per distingure server pipe (1 solo, cioè il primo che acquista il mutex),
+         * da client pipe (tutti gli altri che non riescono ad acquistare il mutex)
+        */
+        static Mutex mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8CF-72F04E6BDE8F}");
+
         static Registration registration;
+
         [STAThread]
         public static void Main(string[] args)
         {
             mt = null;
+
+            //Parametri ricevuti
+            /*
+            string str = "";
+
+            foreach (string s in args)
+                str += s + Environment.NewLine;
+
+            MessageBox.Show(str);*/
+
+            //Manage multi instances of the process
+            
+            ManageInstances m = new ManageInstances();
+
+            if(mutex.WaitOne(TimeSpan.Zero, true))
+            {
+                Thread manageMultiInstances;
+                manageMultiInstances = new Thread(new ThreadStart(m.ServerPipe));
+                manageMultiInstances.Start();
+            }
+            else
+            {
+                m.ClientPipe();
+            }
+
             CreateTaskbarIcon();
             Utilities.Persistency.install();
             try
