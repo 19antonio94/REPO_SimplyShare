@@ -26,12 +26,17 @@ namespace SimplyShare.Utilities
                     StreamReader reader = new StreamReader(server);
 
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendLine(reader.ReadToEnd());
-                    
+                    sb.Append(reader.ReadToEnd());
+
                     /*
                      * Per ora il server stampa solo i parametri ricevuti dai client, ma qui si possono aggiungere ad una lista 
                      */
-                    MessageBox.Show(sb.ToString());
+                    string[] stringSeparators = new string[] { "\r\n" };
+                   
+                    foreach (string s in sb.ToString().Split(stringSeparators, StringSplitOptions.None))
+                    {
+                        Program.paths.Add(s);
+                    }
 
                     reader.Close();
                     reader.Dispose();

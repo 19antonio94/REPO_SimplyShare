@@ -13,7 +13,7 @@ using System.Reflection;
 using shared;
 using System.Windows;
 
-// ciao
+//
 
 
     //sarebbe bello che mainthread pubblisher 

@@ -34,14 +34,12 @@ namespace SimplyShare.Utilities
              Encoding.ASCII.GetString(message);
             if (Encoding.ASCII.GetString(message).Equals("send me image")) //se mi richiede l'immagine allora la invio
             {
-
-                Int64 size_immagine = PCuser.profilePic.LongLength;
-                
+                Int64 size_immagine = PCuser.profilePic.LongLength;              
                 byte[] size_b = new byte[8];
                 size_b = BitConverter.GetBytes(size_immagine);             
                 stream.Write(size_b, 0, size_b.Length);
                 stream.Write(PCuser.profilePic, 0, PCuser.profilePic.Length);
-
+                client.Close();             
             }
             if (message.Equals("invio il file"))
             {

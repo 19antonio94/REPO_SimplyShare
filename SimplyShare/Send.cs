@@ -55,7 +55,8 @@ namespace SimplyShare
             Packet rispostaImmagine = deserializza(data_to_receive);
             if (rispostaImmagine.getDescrizione().Equals("Accetto file"))
             {
-                InvioTCP invioFile = new InvioTCP(mioEp,n,mt);
+                InvioTCP invioFile = new InvioTCP(mioEp,n,mt,"invia il file");
+                
                 Thread t = new Thread(new ThreadStart(invioFile.TcpConnect)); //-->"i send image"
                 t.Start();
 

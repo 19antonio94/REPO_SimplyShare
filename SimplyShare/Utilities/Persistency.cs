@@ -4,6 +4,9 @@ using System.Windows.Media.Imaging;
 using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using SimplyShare.Models;
+using shared;
+
+
 
 namespace SimplyShare.Utilities
 {

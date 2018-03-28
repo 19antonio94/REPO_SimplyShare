@@ -60,6 +60,7 @@ namespace SimplyShare.Windows
 
         private void InviaButton_Click(object sender, RoutedEventArgs e)
         {
+            
             //selezione utente;
             foreach (ConnectedUser cu in UsersContainer.Children)
             {
@@ -67,7 +68,7 @@ namespace SimplyShare.Windows
                 {
                     //invia file a cu
                     //trovare ip di cu 
-                    mt.p_invia_file(new User(cu.Nome,cu.Cognome),PercorsoFile.Text);
+                    mt.p_invia_file(new User(cu.Nome,cu.Cognome),PercorsoFile.Text); //cu ha anche remoteip
                     string a;
                     a= "";
                 }
@@ -76,7 +77,7 @@ namespace SimplyShare.Windows
 
         private void SfogliaButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ScegliFile = new OpenFileDialog();
+            OpenFileDialog ScegliFile = new OpenFileDialog();                      
             ScegliFile.DefaultExt = "*";
             if (ScegliFile.ShowDialog() == true && ScegliFile.CheckPathExists)
             {//se ho scelto un file
@@ -89,8 +90,8 @@ namespace SimplyShare.Windows
                 {
                     return;
                 }
-
                 PercorsoFile.Text = filename;
+                Program.paths.Add(filename);
             }
 
         }
@@ -124,27 +125,6 @@ namespace SimplyShare.Windows
                 ((ConnectedUser)sender).Background = Brushes.CadetBlue;
             }
         }
-
-        /* async void Populate()
-         {
-             List<User> UsersToBeDisplayed;
-             //mt.ricerca_utenti();
-             //UsersToBeDisplayed = mt.GetUsers();
-            // del_cleaner cleaner = CleanUsersContainer;
-
-             //Dispatcher.Invoke(cleaner,new object[]{UsersContainer.Children });
-             /*
-             foreach(User u in UsersToBeDisplayed)
-             {
-                 ConnectedUser cu = new ConnectedUser();
-                 cu.Name = u.getNome();
-                 cu.Cognome = u.getCognome();
-                 //cu.UserPicSource = (BitmapImage)u.GetProfilePic();
-                 UsersContainer.Children.Add(cu);
-             }*/
-
-
-        // }
 
         void CleanUsersContainer(UIElementCollection children)
         {
