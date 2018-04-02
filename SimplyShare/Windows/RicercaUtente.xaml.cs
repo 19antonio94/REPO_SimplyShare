@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -60,7 +61,23 @@ namespace SimplyShare.Windows
 
         private void InviaButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
+            //creo lo zip è lo invio ad ognuno, i percorsi dei file da inviare sono in Program.paths
+            string[] allPaths = Program.paths.ToArray();
+            string currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            //Genero il path della cartella in cui voglio salvare i dati
+            currentPath = System.IO.Path.Combine(currentPath, "User Profile");
+            if (!Directory.Exists(currentPath + "\\tempFile1"))
+            {
+                Directory.CreateDirectory(currentPath + "\\tempFile1");
+    
+                
+            }
+            foreach (string doc in allPaths)
+            {
+                File.Copy(doc, currentPath + "\\tempFile1\\"+ System.IO.Path.GetFileName(doc));
+            }
+            ZipFile.CreateFromDirectory(currentPath + "\\tempFile1", currentPath + "\\tempFileZip.zip");
             //selezione utente;
             foreach (ConnectedUser cu in UsersContainer.Children)
             {
@@ -73,6 +90,9 @@ namespace SimplyShare.Windows
                     a= "";
                 }
             }
+            File.Delete(currentPath + "\\tempFileZip.zip");
+           
+            Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
         }
 
         private void SfogliaButton_Click(object sender, RoutedEventArgs e)
