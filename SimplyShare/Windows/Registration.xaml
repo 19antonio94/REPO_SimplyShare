@@ -50,7 +50,14 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">
-            <Button Grid.Row="1" x:Name="StartButton" IsEnabled="False" Content="Start" Click="StartButton_Click"  Height="30" Width="80" HorizontalAlignment="Center"/>
+            <StackPanel  x:Name="PathContainer" Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,0" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" Text="Cartella download:" Margin="20,0,31,0"/>
+                <Label VerticalAlignment="Center"  ClipToBounds="True" Width="155" HorizontalContentAlignment="Left" HorizontalAlignment="Right" Padding="0" >
+                    <TextBlock FontSize="12" x:Name="PercorsoCartella" VerticalAlignment="Center" HorizontalAlignment="Right" TextAlignment="Right" Height="19" />
+                </Label>
+            </StackPanel>
+            <Button x:Name="SfogliaCartellaButton" Click="SfogliaCartella_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="306,0,187,33" Content="Sfoglia" Height="26" Width="80"/>
+            <Button Grid.Row="1" x:Name="StartButton" IsEnabled="False" Content="Start" Click="StartButton_Click"  Height="30" Width="80" HorizontalAlignment="Right" RenderTransformOrigin="-0.383,0.744" Padding="5.2" Margin="0, 0, 70, 0"/>
         </Grid>
     </Grid>
 </Window>
