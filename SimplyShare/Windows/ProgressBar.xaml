@@ -1,0 +1,13 @@
+﻿<Window x:Class="SimplyShare.Windows.ProgressBar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimplyShare.Windows"
+        mc:Ignorable="d"
+        Title="Avanzamento" Height="148" Width="308.667">
+    <Grid  Margin="20">
+        <ProgressBar Minimum="0" Maximum="100" Name="Bar" Margin="0,0,0,56" />
+        <Button x:Name="StartButton" Content="Annulla" Click="AnnullaButton_Click"  Height="30" Width="80" HorizontalAlignment="Right" Padding="5.2" Margin="0,24, 0, -20"/>
+    </Grid>
+</Window>
