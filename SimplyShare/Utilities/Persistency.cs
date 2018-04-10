@@ -123,5 +123,20 @@ namespace SimplyShare.Utilities
             //Ritorna null se non esiste il file UserData.json
             return null;
         }
+
+        public static void disinstall()
+        {
+            //Cancella le chiavi di sistema se esistono
+            Registry.ClassesRoot.DeleteSubKeyTree(@"Directory\shell\Condividi con SimpleShare", false);
+            Registry.ClassesRoot.DeleteSubKeyTree(@"*\shell\Condividi con SimpleShare", false);
+            //Questa era della versione vecchia con link sul cestino
+            Registry.ClassesRoot.DeleteSubKeyTree(@"Folder\shell\Condividi con SimpleShare", false);
+
+            //Cancella cartelle create da install e file contenuti
+            if(Directory.Exists(getUserDirectory()))
+                Directory.Delete(getUserDirectory(), true);
+            if(Directory.Exists(getDownloadDirectory()))
+                Directory.Delete(getDownloadDirectory(), true);
+        }
     }
 }
