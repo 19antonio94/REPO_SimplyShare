@@ -41,8 +41,8 @@ namespace SimplyShare.Utilities
                 //Aggiunta chiavi di sistema. Richiedono autorizzazione (da fare). Apre un'istanza per ogni parametro di ingresso
                 //SU CARTELLE 
                 RegistryKey key;
-                key = Registry.ClassesRoot.CreateSubKey(@"Folder\shell\Condividi con SimpleShare");
-                key = Registry.ClassesRoot.CreateSubKey(@"Folder\shell\Condividi con SimpleShare\command");
+                key = Registry.ClassesRoot.CreateSubKey(@"Directory\shell\Condividi con SimpleShare");
+                key = Registry.ClassesRoot.CreateSubKey(@"Directory\shell\Condividi con SimpleShare\command");
                 key.SetValue("", '"' + System.Reflection.Assembly.GetEntryAssembly().Location + '"' + '"' + "%1" + '"');
                 //SU FILE
                 key = Registry.ClassesRoot.CreateSubKey(@"*\shell\Condividi con SimpleShare");
