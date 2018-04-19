@@ -87,27 +87,40 @@ namespace SimplyShare
             modalita = set;
 
         }
-        public void p_invia_file(User u,string path) //aggiungere pathfile //u è il destinatario
+        public void p_invia_file(User u,string path,IPEndPoint destinatario) //aggiungere pathfile //u è il destinatario
         {
-            IPEndPoint destinatario= null;
-            try
-            {
-                destinatario = utenti.FirstOrDefault(x => (x.Value.getNome() == u.getNome()) && (x.Value.getCognome() == u.getCognome()) ).Key;
-            }
-            catch (ArgumentNullException a)
-            {
-                MessageBox.Show(a.Message);
-                
-            }
+            
+
             if (destinatario != null)
             {
-                Send s = new Send(user, path , destinatario, ipep, newsock); //add pathfile
-                invia_file = new Thread(new ThreadStart(s.r_send_file));
+                //Send s = new Send(user, path , destinatario, ipep, newsock); 
+                //invia_file = new Thread(new ThreadStart(s.r_send_file));
+                //invia_file.Start();
+
+                //chiamare tcpConnect qui per mandare il file
+                InvioTCP i_file = new InvioTCP(ipep, u, destinatario, this, "invia il file",path);
+                invia_file = new Thread(new ThreadStart(i_file.TcpConnect));
                 invia_file.Start();
             }
             
 
         }
+
+        public IPEndPoint getIPfromUser(User u)
+        {
+            foreach (var l in utenti)
+            {
+                if (l.Value.nome.Equals(u.nome) && l.Value.cognome.Equals(u.cognome))
+                {
+                    return l.Key;
+                }
+            }
+
+            return null;
+
+        }
+
+
         public void start_main_thread()
         {
             if (!anq1.IsAlive )
@@ -177,7 +190,7 @@ namespace SimplyShare
                             
                             
                             utenti.Add(p_estratto.getIpMittente(), p_estratto.getUser());
-                            InvioTCP s1 = new InvioTCP(ipep, p_estratto.getUser(), p_estratto.getIpMittente(),this,"richiedi immagine"); //qui richiedo l'immagine
+                            InvioTCP s1 = new InvioTCP(ipep, p_estratto.getUser(), p_estratto.getIpMittente(),this,"richiedi immagine",null); //qui richiedo l'immagine
                             var tcp = new Thread(new ThreadStart(s1.TcpConnect));
                             tcp.Start();
                         }
@@ -186,8 +199,13 @@ namespace SimplyShare
                     }
                     if (p_estratto.getDescrizione().Equals("Richiesta invio"))
                     {
-                        //message box per sapere se si vuole accettare o no
-                        //problema path_file , come farlo bene ?
+                        ////message box per sapere se si vuole accettare o no
+                        //var result = MessageBox.Show("Accettare i files da " + p_estratto.getUser().nome + " " + p_estratto.getUser().cognome, "Accettare?", MessageBoxButton.YesNo);
+                        //if (result == MessageBoxResult.Yes)
+                        //{
+                        //    Packet p_inviami_il_file = new Packet("", ipep);
+                        //}
+                        ////problema path_file , come farlo bene ?
                     }
                 }
                 _m.ReleaseMutex();

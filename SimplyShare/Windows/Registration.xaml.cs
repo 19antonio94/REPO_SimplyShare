@@ -46,6 +46,7 @@ namespace SimplyShare.Windows
                 {
                     ProfilePic.ImageSource = previousAccess.ProfilePic;
                     immagineCaricata = true;
+                    pic = previousAccess.ProfilePic;
                 }
             }
 

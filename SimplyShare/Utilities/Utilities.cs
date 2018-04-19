@@ -49,7 +49,7 @@ namespace SimplyShare.Utilities
             //Ricevi la richiesta("send me image") 
             var stream = client.GetStream();
             byte[] message = MyReceive(stream);
-             Encoding.ASCII.GetString(message);
+             var right_message = Encoding.ASCII.GetString(message);
             if (Encoding.ASCII.GetString(message).Equals("send me image")) //se mi richiede l'immagine allora la invio
             {
                 Int64 size_immagine = PCuser.profilePic.LongLength;              
@@ -59,16 +59,37 @@ namespace SimplyShare.Utilities
                 stream.Write(PCuser.profilePic, 0, PCuser.profilePic.Length);
                 client.Close();             
             }
-            if (message.Equals("invio il file"))
+            if (right_message.Equals("invio il file"))
             {
-                //message bocs --> x = x+1  x := x+1   
-                byte[] mess = Encoding.ASCII.GetBytes("aspetto il file");
-                stream.Write(mess,0,mess.Length);
-                //ricezione e salvataggio file
+                 
+
+                var result = MessageBox.Show("Accettare i files da" , "Accettare?", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    byte[] mess = Encoding.ASCII.GetBytes("aspetto il file");
+                    stream.Write(mess, 0, mess.Length);
+                    //ricezione e salvataggio file
+                    List<Byte> lstBuff = new List<byte>();
+                    byte[] tempBuff = new byte[1];
+                    byte[] completeMessage;
+                    Thread.Sleep(70);
+                    while (stream.DataAvailable)
+                    {
+                        stream.Read(tempBuff, 0, tempBuff.Length);
+                        lstBuff.AddRange(tempBuff);
+                    }
+
+                    completeMessage = new byte[lstBuff.Count];
+                    lstBuff.CopyTo(completeMessage);
+                    File.WriteAllBytes("ciao.zip", completeMessage);
+                }
+     
+
+
             }
         }
 
-        private byte[] MyReceive(NetworkStream stream)
+        public static byte[] MyReceive(NetworkStream stream)
         {
             List<Byte> lstBuff = new List<byte>();
             byte[] tempBuff = new byte[1];

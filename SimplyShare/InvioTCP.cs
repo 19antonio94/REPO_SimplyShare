@@ -47,12 +47,13 @@ namespace SimplyShare
 
 
         }
-        public InvioTCP(IPEndPoint localEP, User u, IPEndPoint remoteEP, MainThread t, string task) //aggiungere path_file
+        public InvioTCP(IPEndPoint localEP, User u, IPEndPoint remoteEP, MainThread t, string task,string percorso) //aggiungere path_file
         {
             utente_image = u;
             this.localEP = localEP;
             this.remoteEp = remoteEP;
             this.task = task;
+            this.path_file = percorso;
 
         }
 
@@ -90,13 +91,12 @@ namespace SimplyShare
             try
             {
                 //Int32 portTCP = 8001;
-                TcpClient client = new TcpClient(); ////buuu
+                TcpClient client = new TcpClient(); 
                 client.Connect(remoteEp.Address, remoteEp.Port);
-                //MessageBox.Show(client.Connected.ToString() + "connessione ");
-                //scrivere quello che si vuole fare...la connessione è avvenuta
+
                 if (task.Equals("invia il file"))
                 {
-                    // prima la richiesta per far capire che mando un file
+                   // prima la richiesta per far capire che mando un file
                     string message = "invio il file";
                     byte[] rispostaByte = new byte[1024];
                     Byte[] messageByte = Encoding.ASCII.GetBytes(message);
@@ -104,19 +104,21 @@ namespace SimplyShare
                     stream.Write(messageByte, 0, messageByte.Length);
 
                     //aspettare conferma e poi inviare file
-                    stream.Read(rispostaByte, 0, rispostaByte.Length);
+                     stream.Read(rispostaByte, 0, rispostaByte.Length);
+                    
                     string risposta = Encoding.ASCII.GetString(rispostaByte);
-                    if (risposta.Equals("aspetto il file"))
+                    
+                    if (risposta.CompareTo("aspetto il file")==0)
                     {
                         if (path_file != null)
                         {
                             //invia file(zip)
                             FileStream fs = new FileStream(path_file, FileMode.Open, FileAccess.Read);
                             BinaryReader br = new BinaryReader(fs);
-                            
+
                             int count = 0;
                             int size = -1;
-                            
+
                             byte[] buff = new byte[4096];
                             while ((size = fs.Read(buff, 0, buff.Count())) > 0)
                             {
@@ -125,6 +127,7 @@ namespace SimplyShare
                                 int percentComplete = (int)(((float)count * 100) / (float)fs.Length);
 
                             }
+
 
                         }
 

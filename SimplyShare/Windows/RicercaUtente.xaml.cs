@@ -85,14 +85,15 @@ namespace SimplyShare.Windows
                 {
                     //invia file a cu
                     //trovare ip di cu 
-                    mt.p_invia_file(new User(cu.Nome,cu.Cognome),PercorsoFile.Text); //cu ha anche remoteip
-                    string a;
-                    a= "";
+                    
+                    mt.p_invia_file(new User(cu.Nome,cu.Cognome), currentPath + "\\tempFileZip.zip", cu.RemoteEP); 
+
                 }
             }
-            File.Delete(currentPath + "\\tempFileZip.zip");
-           
-            Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
+            //CANCELLARLO QUANDO IL FILE é INVIATO
+            //File.Delete(currentPath + "\\tempFileZip.zip");
+
+            //Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
         }
 
         private void SfogliaButton_Click(object sender, RoutedEventArgs e)
@@ -124,7 +125,8 @@ namespace SimplyShare.Windows
             {
                 if (u != null)
                 {
-                    ConnectedUser cu = new ConnectedUser(u.getNome(),u.getCognome(),null,ToImage(u.getImageByte()));                                      
+                    IPEndPoint destination = mt.getIPfromUser(new User(u.nome, u.cognome));
+                    ConnectedUser cu = new ConnectedUser(u.getNome(),u.getCognome(),destination,ToImage(u.getImageByte()));                                      
                     cu.Click += Cu_UserClicked;                  
                     UsersContainer.Children.Add(cu);
                 }
