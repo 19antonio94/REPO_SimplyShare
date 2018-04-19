@@ -11,7 +11,7 @@ namespace SimplyShare.Models
     public class LoggedUser
     {
         private BitmapImage _ProfilePic;
-        private string _Nome, _Cognome;
+        private string _Nome, _Cognome, _PathDownload;
         private Boolean _Modality;
 
         public LoggedUser(BitmapImage ProfilePic, string Nome, string Cognome, Boolean Modality)
@@ -20,11 +20,22 @@ namespace SimplyShare.Models
             _Nome = Nome;
             _Cognome = Cognome;
             _Modality = Modality;
+            _PathDownload = null;
+        }
+
+        public LoggedUser(BitmapImage ProfilePic, string Nome, string Cognome, Boolean Modality, string PathDownload)
+        {
+            _ProfilePic = ProfilePic;
+            _Nome = Nome;
+            _Cognome = Cognome;
+            _Modality = Modality;
+            _PathDownload = PathDownload;
         }
 
         public BitmapImage ProfilePic { get { return _ProfilePic; } set { _ProfilePic = value; } }
         public string Nome { get { return _Nome; } set { _Nome = value; } }
         public string Cognome { get { return _Cognome; } set { _Cognome = value; } }
         public Boolean Modality { get { return _Modality; } set { _Modality = value; } }
+        public string PathDownload { get => _PathDownload; set => _PathDownload = value; }
     }
 }

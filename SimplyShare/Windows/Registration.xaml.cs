@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using SimplyShare.Models;
+using System.Windows.Forms;
 
 namespace SimplyShare.Windows
 {
@@ -31,6 +32,7 @@ namespace SimplyShare.Windows
         Boolean modalita = true; //true=publica, false = private
         BitmapImage pic; //metterne una di deafault che poi cambia
         bool immagineCaricata = false;
+        bool pathDownloadSelected = false;
         public Registration()
         {
             InitializeComponent();
@@ -42,7 +44,10 @@ namespace SimplyShare.Windows
             {
                 Nome.Text = previousAccess.Nome;
                 Cognome.Text = previousAccess.Cognome;
-                if(previousAccess.ProfilePic != null)
+                PercorsoCartella.Text = previousAccess.PathDownload;
+                pathDownloadSelected = true;
+
+                if (previousAccess.ProfilePic != null)
                 {
                     ProfilePic.ImageSource = previousAccess.ProfilePic;
                     immagineCaricata = true;
@@ -54,6 +59,9 @@ namespace SimplyShare.Windows
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             Result= new LoggedUser(pic, Nome.Text, Cognome.Text, modalita); //mettere in result tutte le cose che servono
+            if (pathDownloadSelected)
+                Result.PathDownload = PercorsoCartella.Text;
+
             Utilities.Persistency.saveUserData(Result);                     //Salvo dati utente              
             this.DialogResult = true;                                       //modalità
             this.Close();
@@ -65,7 +73,7 @@ namespace SimplyShare.Windows
         }
         private void SfogliaButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ScegliImmagine = new OpenFileDialog();
+            Microsoft.Win32.OpenFileDialog ScegliImmagine = new Microsoft.Win32.OpenFileDialog();
             ScegliImmagine.DefaultExt = "png";
             if (ScegliImmagine.ShowDialog() == true && ScegliImmagine.CheckPathExists)
             {//se ho scelto un'immagine
@@ -104,6 +112,21 @@ namespace SimplyShare.Windows
                 StartButton.IsEnabled = true;
             else
                 StartButton.IsEnabled = false;
+        }
+
+        private void SfogliaCartella_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog ScegliCartella = new FolderBrowserDialog();
+            // Show the FolderBrowserDialog.
+            System.Windows.Forms.DialogResult result = ScegliCartella.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                string foldername = ScegliCartella.SelectedPath;
+                PercorsoCartella.Text = foldername;
+                pathDownloadSelected = true;
+            }
+
         }
     }
 }
