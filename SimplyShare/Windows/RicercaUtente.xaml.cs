@@ -64,6 +64,27 @@ namespace SimplyShare.Windows
 
             //creo lo zip è lo invio ad ognuno, i percorsi dei file da inviare sono in Program.paths
             string[] allPaths = Program.paths.ToArray();
+
+            //Verifico se c'è qualcosa da inviare
+            if(allPaths.Length == 0)
+            {
+                MessageBox.Show("Nessun file o cartella selezionato");
+                return;
+            }
+
+            //Form per conferma elementi da inviare
+            string elementsToSend = "";
+            foreach (string s in allPaths)
+                elementsToSend += Environment.NewLine + s;
+
+            var result = MessageBox.Show("Inviare i seguenti elementi:"+elementsToSend, "Inviare?", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes)
+            {
+                //Svuota lista e ritorna
+                Program.paths.Clear();
+                return;
+            }
+
             string currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             //Genero il path della cartella in cui voglio salvare i dati
             currentPath = System.IO.Path.Combine(currentPath, "User Profile");
@@ -90,7 +111,8 @@ namespace SimplyShare.Windows
 
                 }
             }
-            //CANCELLARLO QUANDO IL FILE é INVIATO
+            //CANCELLARLO QUANDO IL FILE é INVIATO E RIPULIRE paths e sfoglia nel form
+            Program.paths.Clear();
             //File.Delete(currentPath + "\\tempFileZip.zip");
 
             //Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
@@ -112,7 +134,7 @@ namespace SimplyShare.Windows
                     return;
                 }
                 PercorsoFile.Text = filename;
-                Program.paths.Add(filename);
+                Program.paths.Push(filename);
             }
 
         }
