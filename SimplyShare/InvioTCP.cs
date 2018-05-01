@@ -117,6 +117,15 @@ namespace SimplyShare
                             FileStream fs = new FileStream(path_file, FileMode.Open, FileAccess.Read);
                             BinaryReader br = new BinaryReader(fs);
 
+                            //Thread per il form con la barra di avanzamento
+                            Thread formProgressBar;
+                            
+                            formProgressBar = new Thread(new ThreadStart(() => {
+                                Windows.ProgressBar bar = new Windows.ProgressBar();
+                                bar.Show();
+                                System.Windows.Threading.Dispatcher.Run();
+                            }));
+
                             int count = 0;
                             int size = -1;
 
@@ -125,8 +134,7 @@ namespace SimplyShare
                             {
                                 stream.Write(buff, 0, buff.Count());
                                 count += size;
-                                int percentComplete = (int)(((float)count * 100) / (float)fs.Length);
-
+                                int percentComplete = (int)(((float)count * 100) / (float)fs.Length);                             
                             }
 
 

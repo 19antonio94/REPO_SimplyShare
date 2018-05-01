@@ -33,9 +33,9 @@ namespace SimplyShare.Utilities
                      */
                     string[] stringSeparators = new string[] { "\r\n" };
                    
-                    foreach (string s in sb.ToString().Split(stringSeparators, StringSplitOptions.None))
+                    foreach (string s in sb.ToString().Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        Program.paths.Add(s);
+                        Program.paths.Push(s);
                     }
 
                     reader.Close();

@@ -25,7 +25,7 @@ namespace SimplyShare
         public static int PORTA = 60020;
         static MainThread mt;
         static  RicercaUtente RU;
-        public static ConcurrentBag<string> paths;
+        public static ConcurrentStack<string> paths;
 
         /*
          * Utilizzo di un mutex mai rilasciato per distingure server pipe (1 solo, cioè il primo che acquista il mutex),
@@ -55,11 +55,11 @@ namespace SimplyShare
 
             if(mutex.WaitOne(TimeSpan.Zero, true))
             {
-                paths = new ConcurrentBag<string>();
+                paths = new ConcurrentStack<string>();
                 if(args.Length > 1)
                 {
                     for (int i = 1; i < args.Length; i++)
-                        paths.Add(args[i]);
+                        paths.Push(args[i]);
                 }
                 Thread manageMultiInstances;
                 manageMultiInstances = new Thread(new ThreadStart(m.ServerPipe));
