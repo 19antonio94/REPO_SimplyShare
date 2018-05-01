@@ -10,7 +10,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
 using System.Windows.Media.Imaging;
+using System.IO.Compression;
 
 namespace SimplyShare.Utilities
 {
@@ -81,7 +83,10 @@ namespace SimplyShare.Utilities
 
                     completeMessage = new byte[lstBuff.Count];
                     lstBuff.CopyTo(completeMessage);
-                    File.WriteAllBytes("ciao.zip", completeMessage);
+
+                    File.WriteAllBytes(Program.LoggedU.PathDownload+"\\download.zip", completeMessage);
+                    ZipFile.ExtractToDirectory(Program.LoggedU.PathDownload + "\\download.zip", Program.LoggedU.PathDownload);
+                    File.Delete(Program.LoggedU.PathDownload + "\\download.zip");
                 }
      
 

@@ -97,6 +97,7 @@ namespace SimplyShare
                 if (task.Equals("invia il file"))
                 {
                    // prima la richiesta per far capire che mando un file
+
                     string message = "invio il file";
                     byte[] rispostaByte = new byte[1024];
                     Byte[] messageByte = Encoding.ASCII.GetBytes(message);

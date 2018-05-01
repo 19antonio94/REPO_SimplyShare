@@ -21,7 +21,7 @@ namespace SimplyShare
     class Program
     {
         private static TaskbarIcon tbi;
-        private static LoggedUser LoggedU;
+        public static LoggedUser LoggedU;
         public static int PORTA = 60020;
         static MainThread mt;
         static  RicercaUtente RU;
