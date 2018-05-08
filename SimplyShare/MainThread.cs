@@ -100,6 +100,7 @@ namespace SimplyShare
                 //chiamare tcpConnect qui per mandare il file
                 InvioTCP i_file = new InvioTCP(ipep, u, destinatario, this, "invia il file",path);
                 invia_file = new Thread(new ThreadStart(i_file.TcpConnect));
+                invia_file.SetApartmentState(ApartmentState.STA);
                 invia_file.Start();
             }
             

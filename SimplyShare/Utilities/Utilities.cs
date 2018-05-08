@@ -63,8 +63,6 @@ namespace SimplyShare.Utilities
             }
             if (right_message.Equals("invio il file"))
             {
-                 
-
                 var result = MessageBox.Show("Accettare i files da" , "Accettare?", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
@@ -74,7 +72,7 @@ namespace SimplyShare.Utilities
                     List<Byte> lstBuff = new List<byte>();
                     byte[] tempBuff = new byte[1];
                     byte[] completeMessage;
-                    Thread.Sleep(70);
+                    Thread.Sleep(700);
                     while (stream.DataAvailable)
                     {
                         stream.Read(tempBuff, 0, tempBuff.Length);

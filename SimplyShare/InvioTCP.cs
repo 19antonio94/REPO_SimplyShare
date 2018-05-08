@@ -96,8 +96,7 @@ namespace SimplyShare
 
                 if (task.Equals("invia il file"))
                 {
-                   // prima la richiesta per far capire che mando un file
-
+                    // prima la richiesta per far capire che mando un file
                     string message = "invio il file";
                     byte[] rispostaByte = new byte[1024];
                     Byte[] messageByte = Encoding.ASCII.GetBytes(message);
@@ -105,44 +104,16 @@ namespace SimplyShare
                     stream.Write(messageByte, 0, messageByte.Length);
 
                     //aspettare conferma e poi inviare file
-                     stream.Read(rispostaByte, 0, rispostaByte.Length);
-                    
+                    stream.Read(rispostaByte, 0, rispostaByte.Length);
+
                     string risposta = Encoding.ASCII.GetString(rispostaByte);
-                    
-                    if (risposta.CompareTo("aspetto il file")==0)
+
+                    if (risposta.CompareTo("aspetto il file") == 0)
                     {
-                        if (path_file != null)
-                        {
-                            //invia file(zip)
-                            FileStream fs = new FileStream(path_file, FileMode.Open, FileAccess.Read);
-                            BinaryReader br = new BinaryReader(fs);
-
-                            //Thread per il form con la barra di avanzamento
-                            Thread formProgressBar;
-                            
-                            formProgressBar = new Thread(new ThreadStart(() => {
-                                Windows.ProgressBar bar = new Windows.ProgressBar();
-                                bar.Show();
-                                System.Windows.Threading.Dispatcher.Run();
-                            }));
-
-                            int count = 0;
-                            int size = -1;
-
-                            byte[] buff = new byte[4096];
-                            while ((size = fs.Read(buff, 0, buff.Count())) > 0)
-                            {
-                                stream.Write(buff, 0, buff.Count());
-                                count += size;
-                                int percentComplete = (int)(((float)count * 100) / (float)fs.Length);                             
-                            }
-
-
-                        }
-
-
+                        Windows.ProgressBar pb = new Windows.ProgressBar(path_file, remoteEp.Address, remoteEp.Port);
+                        pb.ShowDialog();     
                     }
-
+                        
 
                 }
 
@@ -177,7 +148,7 @@ namespace SimplyShare
                                 {
                                     MessageBox.Show(e.Message + " tcp connect errore lettura");
                                 }
-                            }
+                        }
                         
                         immagine = new byte[lstimg.Count];
                         lstimg.CopyTo(immagine);
@@ -207,8 +178,5 @@ namespace SimplyShare
                 return image;
             }
         }
-
-
-
     }
 }
