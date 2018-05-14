@@ -88,11 +88,11 @@ namespace SimplyShare.Windows
             string currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             //Genero il path della cartella in cui voglio salvare i dati
             currentPath = System.IO.Path.Combine(currentPath, "User Profile");
+            File.Delete(currentPath + "\\tempFileZip.zip");
+            Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
             if (!Directory.Exists(currentPath + "\\tempFile1"))
             {
-                Directory.CreateDirectory(currentPath + "\\tempFile1");
-    
-                
+                Directory.CreateDirectory(currentPath + "\\tempFile1");     
             }
             foreach (string doc in allPaths)
             {
@@ -104,14 +104,10 @@ namespace SimplyShare.Windows
             {
                 if (cu.isSelected)
                 {
-                    //invia file a cu
-                    //trovare ip di cu 
-                    
                     mt.p_invia_file(new User(cu.Nome,cu.Cognome), currentPath + "\\tempFileZip.zip", cu.RemoteEP); 
-
                 }
             }
-            //CANCELLARLO QUANDO IL FILE é INVIATO E RIPULIRE paths e sfoglia nel form
+            //CANCELLARLO QUANDO IL FILE é INVIATO
             Program.paths.Clear();
             //File.Delete(currentPath + "\\tempFileZip.zip");
 
