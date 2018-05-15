@@ -83,12 +83,16 @@ namespace SimplyShare.Utilities
                     lstBuff.CopyTo(completeMessage);
 
                     File.WriteAllBytes(Program.LoggedU.PathDownload+"\\download.zip", completeMessage);
-                    ZipFile.ExtractToDirectory(Program.LoggedU.PathDownload + "\\download.zip", Program.LoggedU.PathDownload);
+                    try
+                    {
+                        ZipFile.ExtractToDirectory(Program.LoggedU.PathDownload + "\\download.zip", Program.LoggedU.PathDownload);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show("Impossibile ricevere il file. Forse l'invio è stato annullato.");
+                    }
                     File.Delete(Program.LoggedU.PathDownload + "\\download.zip");
                 }
-     
-
-
             }
         }
 

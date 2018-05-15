@@ -88,8 +88,7 @@ namespace SimplyShare.Windows
             string currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             //Genero il path della cartella in cui voglio salvare i dati
             currentPath = System.IO.Path.Combine(currentPath, "User Profile");
-            File.Delete(currentPath + "\\tempFileZip.zip");
-            Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
+            
             if (!Directory.Exists(currentPath + "\\tempFile1"))
             {
                 Directory.CreateDirectory(currentPath + "\\tempFile1");     
@@ -173,7 +172,8 @@ namespace SimplyShare.Windows
 
         private void Update_Click(object sender, RoutedEventArgs e)
         {
-            //visualize();
+            //La prima istruzione ripulisce le cose già visualizzate
+            CleanUsersContainer(UsersContainer.Children);
             mt.ricerca_utenti();
             Dictionary<IPEndPoint, User> dicUs = mt.getDictionary();
             List<User> listUtenti = dicUs.Values.ToList<User>();
