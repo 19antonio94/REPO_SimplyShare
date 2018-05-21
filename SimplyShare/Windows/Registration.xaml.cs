@@ -29,7 +29,7 @@ namespace SimplyShare.Windows
             set { _lu = value; }
         }
 
-        Boolean modalita = true; //true=publica, false = private
+        public Boolean modalita = true; //true=publica, false = private
         BitmapImage pic; //metterne una di deafault che poi cambia
         bool immagineCaricata = false;
         bool pathDownloadSelected = false;

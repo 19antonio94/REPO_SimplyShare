@@ -118,9 +118,17 @@ namespace SimplyShare
             MenuItem item2 = new MenuItem();
             item2.Header = "Esci";
             item2.Click += new RoutedEventHandler(exit);
+            MenuItem item3 = new MenuItem();
+            item3.Header = "Pubblica";
+            item3.Click += new RoutedEventHandler(changeToPublicMode);
+            MenuItem item4 = new MenuItem();
+            item4.Header = "Privata";
+            item4.Click += new RoutedEventHandler(changeToPrivateMode);
             ContextMenu cm = new ContextMenu();
+            cm.Items.Add(item3);
+            cm.Items.Add(item4);
             cm.Items.Add(item1);
-            cm.Items.Add(item2);          
+            cm.Items.Add(item2);
             tbi.ContextMenu = cm;
   
         }
@@ -150,6 +158,44 @@ namespace SimplyShare
             }
             tbi.Dispose();
 
+        }
+
+        private static void changeToPublicMode(object sender, EventArgs e)
+        {
+            if (registration != null)
+            {
+                if (!registration.modalita)
+                {
+                    registration.Privata.IsChecked = false;
+                    registration.Pubblica.IsChecked = true;
+                    registration.modalita = true;
+                }
+            }
+
+            if (mt != null)
+            {
+                if(!mt.getModalità())
+                    mt.setModalità(true);
+            }
+        }
+
+        private static void changeToPrivateMode(object sender, EventArgs e)
+        {
+            if (registration != null)
+            {
+                if (registration.modalita)
+                {
+                    registration.Pubblica.IsChecked = false;
+                    registration.Privata.IsChecked = true;
+                    registration.modalita = false;
+                } 
+            }
+
+            if (mt != null)
+            {
+                if (mt.getModalità())
+                    mt.setModalità(false);
+            }
         }
     }
 }

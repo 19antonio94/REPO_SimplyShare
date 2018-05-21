@@ -85,7 +85,11 @@ namespace SimplyShare
         public void setModalità(Boolean set)
         {
             modalita = set;
+        }
 
+        public bool getModalità()
+        {
+            return modalita;
         }
         public void p_invia_file(User u,string path,IPEndPoint destinatario) //aggiungere pathfile //u è il destinatario
         {
