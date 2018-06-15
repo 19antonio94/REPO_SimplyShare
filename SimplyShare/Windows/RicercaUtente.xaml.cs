@@ -61,6 +61,22 @@ namespace SimplyShare.Windows
 
         private void InviaButton_Click(object sender, RoutedEventArgs e)
         {
+            bool userSelected = false;
+            //Controllo che ci sia almeno un utente selezionato (altrimenti nascono brutti bug)
+            foreach (ConnectedUser cu in UsersContainer.Children)
+            {
+                if (cu.isSelected)
+                {
+                    userSelected = true;
+                    break;
+                }
+            }
+
+            if (!userSelected)
+            {
+                MessageBox.Show("Nessun destinatario selezionato");
+                return;
+            }
 
             //creo lo zip è lo invio ad ognuno, i percorsi dei file da inviare sono in Program.paths
             string[] allPaths = Program.paths.ToArray();

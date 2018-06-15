@@ -33,7 +33,7 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <Button x:Name="Update" Click="Update_Click" Content="Aggiorna" Margin="0,0,20,0"/>
-                <Button x:Name="InviaButton" Click="InviaButton_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5,2" Content="Invia"/>
+                <Button x:Name="InviaButton" Click="InviaButton_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5,2,1,2" Content="Invia"/>
             </StackPanel>
         </Grid>
     </Grid>
