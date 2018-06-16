@@ -32,6 +32,7 @@ namespace SimplyShare.Windows
         public Boolean modalita = true; //true=publica, false = private
         BitmapImage pic; //metterne una di deafault che poi cambia
         bool immagineCaricata = false;
+        public bool closeByUser = true;
         bool pathDownloadSelected = false;
         public Registration()
         {
@@ -62,7 +63,8 @@ namespace SimplyShare.Windows
             if (pathDownloadSelected)
                 Result.PathDownload = PercorsoCartella.Text;
 
-            Utilities.Persistency.saveUserData(Result);                     //Salvo dati utente              
+            Utilities.Persistency.saveUserData(Result);                     //Salvo dati utente   
+            closeByUser = false;
             this.DialogResult = true;                                       //modalità
             this.Close();
         }
@@ -127,6 +129,17 @@ namespace SimplyShare.Windows
                 pathDownloadSelected = true;
             }
 
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (closeByUser)
+            {
+                e.Cancel = true;
+                this.Topmost = false;
+                this.ShowInTaskbar = false;
+                this.WindowState = WindowState.Minimized;
+            }
         }
     }
 }

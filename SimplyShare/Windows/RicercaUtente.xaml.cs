@@ -30,6 +30,7 @@ namespace SimplyShare.Windows
         bool[] selectedUsers;
         byte[] file = null;
         List<User> utenti;
+        public bool closeByUser = true;
         public RicercaUtente(MainThread mt)
         {
             InitializeComponent();
@@ -207,6 +208,17 @@ namespace SimplyShare.Windows
                 image.StreamSource = ms;
                 image.EndInit();
                 return image;
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (closeByUser)
+            {
+                e.Cancel = true;
+                this.Topmost = false;
+                this.ShowInTaskbar = false;
+                this.WindowState = WindowState.Minimized;
             }
         }
     }

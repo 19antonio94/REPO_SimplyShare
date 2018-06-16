@@ -9,7 +9,7 @@
         Height="400"
         MinWidth="600"
         mc:Ignorable="d"
-        Title="RicercaUtente">
+        Title="RicercaUtente" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

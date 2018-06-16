@@ -9,7 +9,7 @@
         ShowInTaskbar="True"
         Title="Simply Share"
         Width="600"
-        Height="400">
+        Height="400" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
