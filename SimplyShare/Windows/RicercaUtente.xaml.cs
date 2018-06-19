@@ -30,6 +30,7 @@ namespace SimplyShare.Windows
         bool[] selectedUsers;
         byte[] file = null;
         List<User> utenti;
+        public bool closeByUser = true;
         public RicercaUtente(MainThread mt)
         {
             InitializeComponent();
@@ -61,6 +62,22 @@ namespace SimplyShare.Windows
 
         private void InviaButton_Click(object sender, RoutedEventArgs e)
         {
+            bool userSelected = false;
+            //Controllo che ci sia almeno un utente selezionato (altrimenti nascono brutti bug)
+            foreach (ConnectedUser cu in UsersContainer.Children)
+            {
+                if (cu.isSelected)
+                {
+                    userSelected = true;
+                    break;
+                }
+            }
+
+            if (!userSelected)
+            {
+                MessageBox.Show("Nessun destinatario selezionato");
+                return;
+            }
 
             //creo lo zip è lo invio ad ognuno, i percorsi dei file da inviare sono in Program.paths
             string[] allPaths = Program.paths.ToArray();
@@ -88,12 +105,7 @@ namespace SimplyShare.Windows
             string currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             //Genero il path della cartella in cui voglio salvare i dati
             currentPath = System.IO.Path.Combine(currentPath, "User Profile");
-           
-            if (Directory.Exists(currentPath + "\\tempFile1"))
-            {
-                File.Delete(currentPath + "\\tempFileZip.zip");
-                Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
-            }
+            
             if (!Directory.Exists(currentPath + "\\tempFile1"))
             {
                 Directory.CreateDirectory(currentPath + "\\tempFile1");     
@@ -104,8 +116,6 @@ namespace SimplyShare.Windows
             }
             ZipFile.CreateFromDirectory(currentPath + "\\tempFile1", currentPath + "\\tempFileZip.zip");
             //selezione utente;
-            if (UsersContainer.Children.Count == 0)  MessageBox.Show("Selezionare destinatario"); 
-
             foreach (ConnectedUser cu in UsersContainer.Children)
             {
                 if (cu.isSelected)
@@ -144,7 +154,7 @@ namespace SimplyShare.Windows
         private delegate void del_cleaner(UIElementCollection children);
         private void visualize(List<User> lstUtenti)
         {
-            UsersContainer.Children.Clear();
+
             foreach (User u in lstUtenti)
             {
                 if (u != null)
@@ -179,7 +189,8 @@ namespace SimplyShare.Windows
 
         private void Update_Click(object sender, RoutedEventArgs e)
         {
-            //visualize();
+            //La prima istruzione ripulisce le cose già visualizzate
+            CleanUsersContainer(UsersContainer.Children);
             mt.ricerca_utenti();
             Dictionary<IPEndPoint, User> dicUs = mt.getDictionary();
             List<User> listUtenti = dicUs.Values.ToList<User>();
@@ -197,6 +208,17 @@ namespace SimplyShare.Windows
                 image.StreamSource = ms;
                 image.EndInit();
                 return image;
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (closeByUser)
+            {
+                e.Cancel = true;
+                this.Topmost = false;
+                this.ShowInTaskbar = false;
+                this.WindowState = WindowState.Minimized;
             }
         }
     }

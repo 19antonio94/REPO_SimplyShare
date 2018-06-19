@@ -110,7 +110,7 @@ namespace SimplyShare
 
                     if (risposta.CompareTo("aspetto il file") == 0)
                     {
-                        Windows.ProgressBar pb = new Windows.ProgressBar(client,path_file);
+                        Windows.ProgressBar pb = new Windows.ProgressBar(path_file, client);
                         pb.ShowDialog();     
                     }
                         

@@ -24,7 +24,7 @@ namespace SimplyShare
         public static LoggedUser LoggedU;
         public static int PORTA = 60020;
         static MainThread mt;
-        static  RicercaUtente RU;
+        static  RicercaUtente RU = null;
         public static ConcurrentStack<string> paths;
 
         /*
@@ -33,7 +33,7 @@ namespace SimplyShare
         */
         static Mutex mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8CF-72F04E6BDE8F}");
 
-        static Registration registration;
+        static Registration registration = null;
 
         [STAThread]
         public static void Main(string[] args)
@@ -75,7 +75,7 @@ namespace SimplyShare
             try
             {
                 registration = new Registration();
-
+                
                 if (registration.ShowDialog() == false)
                 {
                     Environment.Exit(Environment.ExitCode);
@@ -118,12 +118,23 @@ namespace SimplyShare
             MenuItem item2 = new MenuItem();
             item2.Header = "Esci";
             item2.Click += new RoutedEventHandler(exit);
+            MenuItem item3 = new MenuItem();
+            item3.Header = "Pubblica";
+            item3.Click += new RoutedEventHandler(changeToPublicMode);
+            MenuItem item4 = new MenuItem();
+            item4.Header = "Privata";
+            item4.Click += new RoutedEventHandler(changeToPrivateMode);
             ContextMenu cm = new ContextMenu();
+            cm.Items.Add(item3);
+            cm.Items.Add(item4);
             cm.Items.Add(item1);
-            cm.Items.Add(item2);          
+            cm.Items.Add(item2);
             tbi.ContextMenu = cm;
-  
+            tbi.TrayLeftMouseDown += new RoutedEventHandler(showWindow);
+
+
         }
+
         private static void send_file(object sender,EventArgs e)
         {
             try
@@ -142,14 +153,70 @@ namespace SimplyShare
         {
             if (registration != null)
             {
+                registration.closeByUser = false;
                 registration.Close();
             }
             if (RU != null)
             {
+                RU.closeByUser = false;
                 RU.Close();
             }
             tbi.Dispose();
 
+        }
+
+        private static void changeToPublicMode(object sender, EventArgs e)
+        {
+            if (registration != null)
+            {
+                if (!registration.modalita)
+                {
+                    registration.Privata.IsChecked = false;
+                    registration.Pubblica.IsChecked = true;
+                    registration.modalita = true;
+                }
+            }
+
+            if (mt != null)
+            {
+                if(!mt.getModalità())
+                    mt.setModalità(true);
+            }
+        }
+
+        private static void changeToPrivateMode(object sender, EventArgs e)
+        {
+            if (registration != null)
+            {
+                if (registration.modalita)
+                {
+                    registration.Pubblica.IsChecked = false;
+                    registration.Privata.IsChecked = true;
+                    registration.modalita = false;
+                } 
+            }
+
+            if (mt != null)
+            {
+                if (mt.getModalità())
+                    mt.setModalità(false);
+            }
+        }
+
+        private static void showWindow(object sender, RoutedEventArgs e)
+        {
+            if(registration != null)
+            {
+                registration.ShowInTaskbar = true;      //Rimette l'icona nella barra applicazioni
+                registration.WindowState = WindowState.Normal;      //Rivisualizza la finestra
+                registration.Topmost = true;        //Mette la finestra sopra le altre
+            }
+            if(RU != null)
+            {
+                RU.ShowInTaskbar = true;
+                RU.WindowState = WindowState.Normal;
+                RU.Topmost = true;
+            }
         }
     }
 }

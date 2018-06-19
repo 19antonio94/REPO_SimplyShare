@@ -26,19 +26,15 @@ namespace SimplyShare.Windows
     {
         private static BackgroundWorker backgroundWorker;
         private String path_file;
-        //private IPAddress ip;
-        //private int port;
         TcpClient client;
 
-        public ProgressBar(TcpClient c,string p)
+        public ProgressBar(String path_file, TcpClient client)
         {
             InitializeComponent();
             //Inizializzazione barra a 0
             Bar.Value = 0;
-            this.path_file = p;
-            //this.ip = ip;
-            //this.port = port;
-            client = c;
+            this.path_file = path_file;
+            this.client = client;
 
             //Inizializza background worker e associa metodi ad eventi
             backgroundWorker = new BackgroundWorker();
@@ -71,23 +67,28 @@ namespace SimplyShare.Windows
                 BinaryReader br = new BinaryReader(fs);
                 try
                 {
-                    //TcpClient client = new TcpClient();
-                    //client.Connect(ip, port);
                     var stream = client.GetStream();
                     int count = 0;
                     int size = -1;
 
                     byte[] buff = new byte[4096];
-                    while ((size = fs.Read(buff, 0, buff.Count())) > 0)
+                    while ((size = fs.Read(buff, 0, buff.Count())) > 0 && !backgroundWorker.CancellationPending)
                     {
                         stream.Write(buff, 0, buff.Count());
                         count += size;
                         int percentComplete = (int)(((float)count * 100) / (float)fs.Length);
                         backgroundWorker.ReportProgress(percentComplete);
                     }
+                    if(backgroundWorker.CancellationPending)
+                        e.Cancel = true;
                 }
                 catch(Exception exc){
                     MessageBox.Show(exc.Message + "problema in TCPCONNECT");
+                }
+                finally
+                {
+                    br.Close();
+                    fs.Close();
                 }
                     
             }
@@ -106,16 +107,23 @@ namespace SimplyShare.Windows
             if (e.Cancelled)
             {
                 display("Operazione annullata!");
-                return;
-
                 //percentageLabel.Text = "0";
             }
-            else
+            if(Bar.Value == 100)
             {
                 display("Operazione completata con successo!");
-                return;
             }
-            
+
+            //Sia che l'operazione sia stata annullata sia che sia finita, cancello zip e cartella e chiudo il form con la barra
+            string currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            currentPath = System.IO.Path.Combine(currentPath, "User Profile");
+            if (File.Exists(currentPath + "\\tempFileZip.zip"))
+            {
+                File.Delete(currentPath + "\\tempFileZip.zip");
+                Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
+            }
+            this.Close();
+
         }
 
         //DISPLAY MSG BOX
