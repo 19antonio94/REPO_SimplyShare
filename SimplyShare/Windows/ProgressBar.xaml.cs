@@ -26,17 +26,19 @@ namespace SimplyShare.Windows
     {
         private static BackgroundWorker backgroundWorker;
         private String path_file;
-        private IPAddress ip;
-        private int port;
+        //private IPAddress ip;
+        //private int port;
+        TcpClient client;
 
-        public ProgressBar(String path_file, IPAddress ip, int port)
+        public ProgressBar(TcpClient c,string p)
         {
             InitializeComponent();
             //Inizializzazione barra a 0
             Bar.Value = 0;
-            this.path_file = path_file;
-            this.ip = ip;
-            this.port = port;
+            this.path_file = p;
+            //this.ip = ip;
+            //this.port = port;
+            client = c;
 
             //Inizializza background worker e associa metodi ad eventi
             backgroundWorker = new BackgroundWorker();
@@ -69,8 +71,8 @@ namespace SimplyShare.Windows
                 BinaryReader br = new BinaryReader(fs);
                 try
                 {
-                    TcpClient client = new TcpClient();
-                    client.Connect(ip, port);
+                    //TcpClient client = new TcpClient();
+                    //client.Connect(ip, port);
                     var stream = client.GetStream();
                     int count = 0;
                     int size = -1;

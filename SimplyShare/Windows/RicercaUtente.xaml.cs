@@ -88,8 +88,12 @@ namespace SimplyShare.Windows
             string currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             //Genero il path della cartella in cui voglio salvare i dati
             currentPath = System.IO.Path.Combine(currentPath, "User Profile");
-            File.Delete(currentPath + "\\tempFileZip.zip");
-            Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
+           
+            if (Directory.Exists(currentPath + "\\tempFile1"))
+            {
+                File.Delete(currentPath + "\\tempFileZip.zip");
+                Utilities.Utilities.DeleteDirectory(currentPath + "\\tempFile1");
+            }
             if (!Directory.Exists(currentPath + "\\tempFile1"))
             {
                 Directory.CreateDirectory(currentPath + "\\tempFile1");     
@@ -100,6 +104,8 @@ namespace SimplyShare.Windows
             }
             ZipFile.CreateFromDirectory(currentPath + "\\tempFile1", currentPath + "\\tempFileZip.zip");
             //selezione utente;
+            if (UsersContainer.Children.Count == 0)  MessageBox.Show("Selezionare destinatario"); 
+
             foreach (ConnectedUser cu in UsersContainer.Children)
             {
                 if (cu.isSelected)
@@ -138,7 +144,7 @@ namespace SimplyShare.Windows
         private delegate void del_cleaner(UIElementCollection children);
         private void visualize(List<User> lstUtenti)
         {
-
+            UsersContainer.Children.Clear();
             foreach (User u in lstUtenti)
             {
                 if (u != null)
