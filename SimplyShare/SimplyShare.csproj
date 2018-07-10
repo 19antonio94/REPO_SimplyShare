@@ -78,6 +78,7 @@
     <Compile Include="Send.cs" />
     <Compile Include="Utilities\ManageInstances.cs" />
     <Compile Include="Utilities\Persistency.cs" />
+    <Compile Include="Windows\DirectoryCopyExample.cs" />
     <Compile Include="Windows\ProgressBar.xaml.cs">
       <DependentUpon>ProgressBar.xaml</DependentUpon>
     </Compile>

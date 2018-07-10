@@ -112,8 +112,17 @@ namespace SimplyShare.Windows
             }
             foreach (string doc in allPaths)
             {
-                File.Copy(doc, currentPath + "\\tempFile1\\"+ System.IO.Path.GetFileName(doc));
+                if (Directory.Exists(doc))
+                {
+                    var name = doc.Split('\\');
+                    DirectoryCopyExample.DirectoryCopy(doc, currentPath + "\\tempFile1\\"+name[name.Length-1], true);
+                }
+                else
+                {
+                    File.Copy(doc, currentPath + "\\tempFile1\\" + System.IO.Path.GetFileName(doc));
+                }
             }
+            MessageBox.Show("file copiato");
             ZipFile.CreateFromDirectory(currentPath + "\\tempFile1", currentPath + "\\tempFileZip.zip");
             //selezione utente;
             foreach (ConnectedUser cu in UsersContainer.Children)
